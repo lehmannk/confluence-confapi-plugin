@@ -59,6 +59,7 @@ public class PopMailServerBeanTest {
     }
 
     @Test
+    @SuppressWarnings({"ConstantConditions", "SimplifiableJUnitAssertion"})
     public void testEqualsNull() {
         final PopMailServerBean bean = new PopMailServerBean();
         assertFalse(bean.equals(null));
@@ -71,6 +72,7 @@ public class PopMailServerBeanTest {
     }
 
     @Test
+    @SuppressWarnings("SimplifiableJUnitAssertion")
     public void testEqualsOtherType() {
         final PopMailServerBean bean = new PopMailServerBean();
         assertFalse(bean.equals(new Object()));

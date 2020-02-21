@@ -65,6 +65,7 @@ public class SmtpMailServerBeanTest {
     }
 
     @Test
+    @SuppressWarnings({"ConstantConditions", "SimplifiableJUnitAssertion"})
     public void testEqualsNull() {
         final SmtpMailServerBean bean = new SmtpMailServerBean();
         assertFalse(bean.equals(null));
@@ -77,6 +78,7 @@ public class SmtpMailServerBeanTest {
     }
 
     @Test
+    @SuppressWarnings({"SimplifiableJUnitAssertion"})
     public void testEqualsOtherType() {
         final SmtpMailServerBean bean = new SmtpMailServerBean();
         assertFalse(bean.equals(new Object()));

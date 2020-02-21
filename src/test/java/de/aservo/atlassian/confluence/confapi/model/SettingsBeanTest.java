@@ -37,6 +37,7 @@ public class SettingsBeanTest {
     }
 
     @Test
+    @SuppressWarnings({"ConstantConditions", "SimplifiableJUnitAssertion"})
     public void testEqualsNull() {
         final SettingsBean bean = new SettingsBean();
         assertFalse(bean.equals(null));
@@ -49,6 +50,7 @@ public class SettingsBeanTest {
     }
 
     @Test
+    @SuppressWarnings("SimplifiableJUnitAssertion")
     public void testEqualsOtherType() {
         final SettingsBean bean = new SettingsBean();
         assertFalse(bean.equals(new Object()));
