@@ -1,7 +1,9 @@
 package de.aservo.atlassian.confluence.confapi.model;
 
 import com.atlassian.mail.server.DefaultTestSmtpMailServerImpl;
+import com.atlassian.mail.server.OtherTestSmtpMailServerImpl;
 import com.atlassian.mail.server.SMTPMailServer;
+import de.aservo.atlassian.confluence.confapi.exception.NotConfiguredException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -57,31 +59,46 @@ public class SmtpMailServerBeanTest {
     }
 
     @Test
-    public void testEquals() throws Exception {
+    public void testEqualsHashcode() throws NotConfiguredException {
         final SMTPMailServer server = new DefaultTestSmtpMailServerImpl();
         final SmtpMailServerBean bean1 = SmtpMailServerBean.from(server);
         final SmtpMailServerBean bean2 = SmtpMailServerBean.from(server);
         assertEquals(bean1, bean2);
+        assertEquals(bean1.hashCode(), bean2.hashCode());
     }
 
     @Test
     @SuppressWarnings({"ConstantConditions", "SimplifiableJUnitAssertion"})
-    public void testEqualsNull() {
+    public void testEqualsHashcodeNull() {
         final SmtpMailServerBean bean = new SmtpMailServerBean();
         assertFalse(bean.equals(null));
+        // cannot test hashCode of null
     }
 
     @Test
-    public void testEqualsSameInstance() {
+    public void testEqualsHashcodeSameInstance() {
         final SmtpMailServerBean bean = new SmtpMailServerBean();
         assertEquals(bean, bean);
+        assertEquals(bean.hashCode(), bean.hashCode());
     }
 
     @Test
-    @SuppressWarnings({"SimplifiableJUnitAssertion"})
-    public void testEqualsOtherType() {
+    @SuppressWarnings("SimplifiableJUnitAssertion")
+    public void testEqualsHashcodeOtherType() {
         final SmtpMailServerBean bean = new SmtpMailServerBean();
         assertFalse(bean.equals(new Object()));
+        assertFalse(bean.hashCode() == new Object().hashCode());
+    }
+
+    @Test
+    @SuppressWarnings("SimplifiableJUnitAssertion")
+    public void testEqualsHashcodeOtherInstance() throws NotConfiguredException {
+        final SMTPMailServer server1 = new DefaultTestSmtpMailServerImpl();
+        final SMTPMailServer server2 = new OtherTestSmtpMailServerImpl();
+        final SmtpMailServerBean bean1 = SmtpMailServerBean.from(server1);
+        final SmtpMailServerBean bean2 = SmtpMailServerBean.from(server2);
+        assertFalse(bean1.equals(bean2));
+        assertFalse(bean1.hashCode() == bean2.hashCode());
     }
 
 }
