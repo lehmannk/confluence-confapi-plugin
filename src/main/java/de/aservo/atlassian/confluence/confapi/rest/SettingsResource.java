@@ -15,13 +15,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static de.aservo.atlassian.confluence.confapi.rest.SettingsResource.SETTINGS_PATH;
+
 /**
  * Resource to set general configuration.
  */
-@Path("/settings")
+@Path(SETTINGS_PATH)
 @Produces({MediaType.APPLICATION_JSON})
 @Named("SettingsResource")
 public class SettingsResource {
+
+    public static final String SETTINGS_PATH = "settings";
 
     @ComponentImport
     private final SettingsManager settingsManager;

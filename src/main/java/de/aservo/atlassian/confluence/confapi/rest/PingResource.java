@@ -8,10 +8,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("ping")
+import static de.aservo.atlassian.confluence.confapi.rest.PingResource.PING_PATH;
+
+@Path(PING_PATH)
 @AnonymousAllowed
 @Produces({MediaType.APPLICATION_JSON})
 public class PingResource {
+
+    public static final String PING_PATH = "ping";
 
     public static final String PONG = "pong";
 

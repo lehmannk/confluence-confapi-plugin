@@ -26,13 +26,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static de.aservo.atlassian.confluence.confapi.rest.MailServerResource.MAIL_PATH;
+
 /**
  * Resource to set mail server configuration.
  */
-@Path("/mail")
+@Path(MAIL_PATH)
 @Produces(MediaType.APPLICATION_JSON)
 @Named
 public class MailServerResource {
+
+    public static final String MAIL_PATH = "mail";
+    public static final String MAIL_SMTP_PATH = "smtp";
+    public static final String MAIL_POP_PATH = "pop";
 
     private static final Logger log = LoggerFactory.getLogger(MailServerResource.class);
 
@@ -52,7 +58,7 @@ public class MailServerResource {
     }
 
     @GET
-    @Path("smtp")
+    @Path(MAIL_SMTP_PATH)
     public Response getSmtpMailServer() {
         final ErrorCollection errorCollection = new ErrorCollection();
 
@@ -69,7 +75,7 @@ public class MailServerResource {
     }
 
     @PUT
-    @Path("smtp")
+    @Path(MAIL_SMTP_PATH)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putSmtpMailServer(
             final SmtpMailServerBean bean) {
@@ -135,7 +141,7 @@ public class MailServerResource {
     }
 
     @GET
-    @Path("pop")
+    @Path(MAIL_POP_PATH)
     public Response getPopMailServer() {
         final ErrorCollection errorCollection = new ErrorCollection();
 
@@ -152,7 +158,7 @@ public class MailServerResource {
     }
 
     @PUT
-    @Path("pop")
+    @Path(MAIL_POP_PATH)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putPopMailServer(
             final PopMailServerBean bean) {
