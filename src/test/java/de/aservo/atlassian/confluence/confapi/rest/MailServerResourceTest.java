@@ -20,6 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import java.lang.reflect.Method;
 
@@ -87,14 +88,14 @@ public class MailServerResourceTest {
     }
 
     @Test
-    public void testGetSmtpMailServerNotFound() {
+    public void testGetSmtpMailServerNoContent() {
         doReturn(false).when(mailServerManager).isDefaultSMTPMailServerDefined();
         doReturn(null).when(mailServerManager).getDefaultSMTPMailServer();
 
         final Response response = mailServerResource.getSmtpMailServer();
         final ErrorCollection bean = (ErrorCollection) response.getEntity();
 
-        assertEquals(response.getStatus(), Response.Status.NOT_FOUND.getStatusCode());
+        assertEquals(response.getStatus(), Status.NO_CONTENT.getStatusCode());
         assertTrue(bean.hasAnyErrors());
     }
 
@@ -164,7 +165,7 @@ public class MailServerResourceTest {
         final Response response = mailServerResource.putSmtpMailServer(requestSmtpMailServerBean);
         final ErrorCollection responseErrorCollection = (ErrorCollection) response.getEntity();
 
-        assertEquals(response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
+        assertEquals(response.getStatus(), Status.BAD_REQUEST.getStatusCode());
         assertTrue(responseErrorCollection.hasAnyErrors());
     }
 
@@ -202,13 +203,13 @@ public class MailServerResourceTest {
     }
 
     @Test
-    public void testGetPopMailServerNotFound() {
+    public void testGetPopMailServerNoContent() {
         doReturn(null).when(mailServerManager).getDefaultPopMailServer();
 
         final Response response = mailServerResource.getPopMailServer();
         final ErrorCollection responseErrorCollection = (ErrorCollection) response.getEntity();
 
-        assertEquals(response.getStatus(), Response.Status.NOT_FOUND.getStatusCode());
+        assertEquals(response.getStatus(), Status.NO_CONTENT.getStatusCode());
         assertTrue(responseErrorCollection.hasAnyErrors());
     }
 
@@ -277,7 +278,7 @@ public class MailServerResourceTest {
         final Response response = mailServerResource.putPopMailServer(requestPopMailServerBean);
         final ErrorCollection responseErrorCollection = (ErrorCollection) response.getEntity();
 
-        assertEquals(response.getStatus(), Response.Status.BAD_REQUEST.getStatusCode());
+        assertEquals(response.getStatus(), Status.BAD_REQUEST.getStatusCode());
         assertTrue(responseErrorCollection.hasAnyErrors());
     }
 
