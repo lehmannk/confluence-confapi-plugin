@@ -3,6 +3,7 @@ package de.aservo.atlassian.confluence.confapi.rest;
 import com.atlassian.confluence.setup.settings.Settings;
 import com.atlassian.confluence.setup.settings.SettingsManager;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
+import de.aservo.atlassian.confluence.confapi.helper.WebAuthenticationHelper;
 import de.aservo.atlassian.confluence.confapi.model.SettingsBean;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,15 +31,21 @@ public class SettingsResource {
     @ComponentImport
     private final SettingsManager settingsManager;
 
+    private final WebAuthenticationHelper webAuthenticationHelper;
+
     @Inject
     public SettingsResource(
-            final SettingsManager settingsManager) {
+            final SettingsManager settingsManager,
+            final WebAuthenticationHelper webAuthenticationHelper) {
 
         this.settingsManager = settingsManager;
+        this.webAuthenticationHelper = webAuthenticationHelper;
     }
 
     @GET
     public Response getSettings() {
+        webAuthenticationHelper.mustBeSysAdmin();
+
         final Settings settings = settingsManager.getGlobalSettings();
 
         final SettingsBean settingsBean = new SettingsBean(
@@ -52,6 +59,8 @@ public class SettingsResource {
     @PUT
     public Response putSettings(
             final SettingsBean bean) {
+
+        webAuthenticationHelper.mustBeSysAdmin();
 
         final Settings settings = settingsManager.getGlobalSettings();
 

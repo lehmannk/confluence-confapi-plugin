@@ -8,6 +8,7 @@ import com.atlassian.mail.server.SMTPMailServer;
 import com.atlassian.mail.server.impl.PopMailServerImpl;
 import com.atlassian.mail.server.impl.SMTPMailServerImpl;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
+import de.aservo.atlassian.confluence.confapi.helper.WebAuthenticationHelper;
 import de.aservo.atlassian.confluence.confapi.model.PopMailServerBean;
 import de.aservo.atlassian.confluence.confapi.model.SmtpMailServerBean;
 import de.aservo.atlassian.confluence.confapi.model.ErrorCollection;
@@ -45,6 +46,8 @@ public class MailServerResource {
     @ComponentImport
     private final MailServerManager mailServerManager;
 
+    private final WebAuthenticationHelper webAuthenticationHelper;
+
     /**
      * Constructor.
      *
@@ -52,14 +55,18 @@ public class MailServerResource {
      */
     @Inject
     public MailServerResource(
-            final MailServerManager mailServerManager) {
+            final MailServerManager mailServerManager,
+            final WebAuthenticationHelper webAuthenticationHelper) {
 
         this.mailServerManager = mailServerManager;
+        this.webAuthenticationHelper = webAuthenticationHelper;
     }
 
     @GET
     @Path(MAIL_SMTP_PATH)
     public Response getSmtpMailServer() {
+        webAuthenticationHelper.mustBeSysAdmin();
+
         final ErrorCollection errorCollection = new ErrorCollection();
 
         try {
@@ -79,6 +86,8 @@ public class MailServerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putSmtpMailServer(
             final SmtpMailServerBean bean) {
+
+        webAuthenticationHelper.mustBeSysAdmin();
 
         final ErrorCollection errorCollection = new ErrorCollection();
 
@@ -143,6 +152,8 @@ public class MailServerResource {
     @GET
     @Path(MAIL_POP_PATH)
     public Response getPopMailServer() {
+        webAuthenticationHelper.mustBeSysAdmin();
+
         final ErrorCollection errorCollection = new ErrorCollection();
 
         try {
@@ -162,6 +173,8 @@ public class MailServerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putPopMailServer(
             final PopMailServerBean bean) {
+
+        webAuthenticationHelper.mustBeSysAdmin();
 
         final ErrorCollection errorCollection = new ErrorCollection();
 

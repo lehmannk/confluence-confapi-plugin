@@ -8,6 +8,7 @@ import com.atlassian.mail.server.OtherTestPopMailServerImpl;
 import com.atlassian.mail.server.OtherTestSmtpMailServerImpl;
 import com.atlassian.mail.server.PopMailServer;
 import com.atlassian.mail.server.SMTPMailServer;
+import de.aservo.atlassian.confluence.confapi.helper.WebAuthenticationHelper;
 import de.aservo.atlassian.confluence.confapi.model.PopMailServerBean;
 import de.aservo.atlassian.confluence.confapi.model.SmtpMailServerBean;
 import de.aservo.atlassian.confluence.confapi.model.ErrorCollection;
@@ -34,11 +35,14 @@ public class MailServerResourceTest {
     @Mock
     private MailServerManager mailServerManager;
 
+    @Mock
+    private WebAuthenticationHelper webAuthenticationHelper;
+
     private MailServerResource mailServerResource;
 
     @Before
     public void setup() {
-        mailServerResource = new MailServerResource(mailServerManager);
+        mailServerResource = new MailServerResource(mailServerManager, webAuthenticationHelper);
     }
 
     @Test
@@ -74,6 +78,8 @@ public class MailServerResourceTest {
         final Response response = mailServerResource.getSmtpMailServer();
         final SmtpMailServerBean bean = (SmtpMailServerBean) response.getEntity();
 
+        verify(webAuthenticationHelper).mustBeSysAdmin();
+
         assertEquals(smtpMailServer.getName(), bean.getName());
         assertEquals(smtpMailServer.getDescription(), bean.getDescription());
         assertEquals(smtpMailServer.getHostname(), bean.getHost());
@@ -95,6 +101,8 @@ public class MailServerResourceTest {
         final Response response = mailServerResource.getSmtpMailServer();
         final ErrorCollection bean = (ErrorCollection) response.getEntity();
 
+        verify(webAuthenticationHelper).mustBeSysAdmin();
+
         assertEquals(response.getStatus(), Status.NO_CONTENT.getStatusCode());
         assertTrue(bean.hasAnyErrors());
     }
@@ -109,6 +117,8 @@ public class MailServerResourceTest {
         final SmtpMailServerBean requestSmtpMailServerBean = SmtpMailServerBean.from(updateSmtpMailServer);
         final Response response = mailServerResource.putSmtpMailServer(requestSmtpMailServerBean);
         final SmtpMailServerBean responseSmtpMailServerBean = (SmtpMailServerBean) response.getEntity();
+
+        verify(webAuthenticationHelper).mustBeSysAdmin();
 
         final ArgumentCaptor<SMTPMailServer> smtpMailServerCaptor = ArgumentCaptor.forClass(SMTPMailServer.class);
         verify(mailServerManager).update(smtpMailServerCaptor.capture());
@@ -127,6 +137,8 @@ public class MailServerResourceTest {
         final SmtpMailServerBean requestSmtpMailServerBean = SmtpMailServerBean.from(createSmtpMailServer);
         final Response response = mailServerResource.putSmtpMailServer(requestSmtpMailServerBean);
         final SmtpMailServerBean responseSmtpMailServerBean = (SmtpMailServerBean) response.getEntity();
+
+        verify(webAuthenticationHelper).mustBeSysAdmin();
 
         final ArgumentCaptor<SMTPMailServer> smtpMailServerCaptor = ArgumentCaptor.forClass(SMTPMailServer.class);
         verify(mailServerManager).create(smtpMailServerCaptor.capture());
@@ -147,6 +159,8 @@ public class MailServerResourceTest {
         final Response response = mailServerResource.putSmtpMailServer(requestSmtpMailServerBean);
         final SmtpMailServerBean responseSmtpMailServerBean = (SmtpMailServerBean) response.getEntity();
 
+        verify(webAuthenticationHelper).mustBeSysAdmin();
+
         final ArgumentCaptor<SMTPMailServer> smtpMailServerCaptor = ArgumentCaptor.forClass(SMTPMailServer.class);
         verify(mailServerManager).create(smtpMailServerCaptor.capture());
         final SMTPMailServer smtpMailServer = smtpMailServerCaptor.getValue();
@@ -164,6 +178,8 @@ public class MailServerResourceTest {
         final SmtpMailServerBean requestSmtpMailServerBean = SmtpMailServerBean.from(createSmtpMailServer);
         final Response response = mailServerResource.putSmtpMailServer(requestSmtpMailServerBean);
         final ErrorCollection responseErrorCollection = (ErrorCollection) response.getEntity();
+
+        verify(webAuthenticationHelper).mustBeSysAdmin();
 
         assertEquals(response.getStatus(), Status.BAD_REQUEST.getStatusCode());
         assertTrue(responseErrorCollection.hasAnyErrors());
@@ -192,6 +208,8 @@ public class MailServerResourceTest {
         final Response response = mailServerResource.getPopMailServer();
         final PopMailServerBean bean = (PopMailServerBean) response.getEntity();
 
+        verify(webAuthenticationHelper).mustBeSysAdmin();
+
         assertEquals(popMailServer.getName(), bean.getName());
         assertEquals(popMailServer.getDescription(), bean.getDescription());
         assertEquals(popMailServer.getHostname(), bean.getHost());
@@ -209,6 +227,8 @@ public class MailServerResourceTest {
         final Response response = mailServerResource.getPopMailServer();
         final ErrorCollection responseErrorCollection = (ErrorCollection) response.getEntity();
 
+        verify(webAuthenticationHelper).mustBeSysAdmin();
+
         assertEquals(response.getStatus(), Status.NO_CONTENT.getStatusCode());
         assertTrue(responseErrorCollection.hasAnyErrors());
     }
@@ -222,6 +242,8 @@ public class MailServerResourceTest {
         final PopMailServerBean requestPopMailServerBean = PopMailServerBean.from(updatePopMailServer);
         final Response response = mailServerResource.putPopMailServer(requestPopMailServerBean);
         final PopMailServerBean responsePopMailServerBean = (PopMailServerBean) response.getEntity();
+
+        verify(webAuthenticationHelper).mustBeSysAdmin();
 
         final ArgumentCaptor<PopMailServer> popMailServerCaptor = ArgumentCaptor.forClass(PopMailServer.class);
         verify(mailServerManager).update(popMailServerCaptor.capture());
@@ -239,6 +261,8 @@ public class MailServerResourceTest {
         final PopMailServerBean requestPopMailServerBean = PopMailServerBean.from(createPopMailServer);
         final Response response = mailServerResource.putPopMailServer(requestPopMailServerBean);
         final PopMailServerBean responsePopMailServerBean = (PopMailServerBean) response.getEntity();
+
+        verify(webAuthenticationHelper).mustBeSysAdmin();
 
         final ArgumentCaptor<PopMailServer> popMailServerCaptor = ArgumentCaptor.forClass(PopMailServer.class);
         verify(mailServerManager).create(popMailServerCaptor.capture());
@@ -261,6 +285,8 @@ public class MailServerResourceTest {
         final Response response = mailServerResource.putPopMailServer(requestPopMailServerBean);
         final PopMailServerBean responsePopMailServerBean = (PopMailServerBean) response.getEntity();
 
+        verify(webAuthenticationHelper).mustBeSysAdmin();
+
         final ArgumentCaptor<PopMailServer> popMailServerCaptor = ArgumentCaptor.forClass(PopMailServer.class);
         verify(mailServerManager).create(popMailServerCaptor.capture());
         final PopMailServer popMailServer = popMailServerCaptor.getValue();
@@ -277,6 +303,8 @@ public class MailServerResourceTest {
         final PopMailServerBean requestPopMailServerBean = PopMailServerBean.from(createPopMailServer);
         final Response response = mailServerResource.putPopMailServer(requestPopMailServerBean);
         final ErrorCollection responseErrorCollection = (ErrorCollection) response.getEntity();
+
+        verify(webAuthenticationHelper).mustBeSysAdmin();
 
         assertEquals(response.getStatus(), Status.BAD_REQUEST.getStatusCode());
         assertTrue(responseErrorCollection.hasAnyErrors());

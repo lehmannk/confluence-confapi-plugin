@@ -4,6 +4,7 @@ import com.atlassian.confluence.settings.setup.DefaultTestSettings;
 import com.atlassian.confluence.settings.setup.OtherTestSettings;
 import com.atlassian.confluence.setup.settings.Settings;
 import com.atlassian.confluence.setup.settings.SettingsManager;
+import de.aservo.atlassian.confluence.confapi.helper.WebAuthenticationHelper;
 import de.aservo.atlassian.confluence.confapi.model.SettingsBean;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,11 +31,14 @@ public class SettingsResourceTest {
     @Mock
     private SettingsManager settingsManager;
 
+    @Mock
+    private WebAuthenticationHelper webAuthenticationHelper;
+
     private SettingsResource settingsResource;
 
     @Before
     public void setup() {
-        settingsResource = new SettingsResource(settingsManager);
+        settingsResource = new SettingsResource(settingsManager, webAuthenticationHelper);
     }
 
     @Test
@@ -54,6 +58,8 @@ public class SettingsResourceTest {
         final Response response = settingsResource.getSettings();
         final SettingsBean bean = (SettingsBean) response.getEntity();
 
+        verify(webAuthenticationHelper).mustBeSysAdmin();
+
         assertEquals(SettingsBean.from(settings), bean);
     }
 
@@ -66,6 +72,8 @@ public class SettingsResourceTest {
         final SettingsBean requestBean = SettingsBean.from(updateSettings);
         final Response response = settingsResource.putSettings(requestBean);
         final SettingsBean responseBean = (SettingsBean) response.getEntity();
+
+        verify(webAuthenticationHelper).mustBeSysAdmin();
 
         final ArgumentCaptor<Settings> settingsCaptor = ArgumentCaptor.forClass(Settings.class);
         verify(settingsManager).updateGlobalSettings(settingsCaptor.capture());
